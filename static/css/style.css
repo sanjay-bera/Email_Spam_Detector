@@ -1,0 +1,237 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    max-width: 700px;
+    width: 100%;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    color: white;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    opacity: 0.95;
+}
+
+.card {
+    background: white;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+textarea {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.3s;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.btn-predict {
+    width: 100%;
+    padding: 15px 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-predict:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-predict:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.loader {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.result {
+    margin-top: 30px;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.result-content {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.result-content h2 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.5rem;
+}
+
+.result-badge {
+    display: inline-block;
+    padding: 15px 40px;
+    border-radius: 50px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.result-badge.spam {
+    background: #ff4444;
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3);
+}
+
+.result-badge.not-spam {
+    background: #00C851;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 200, 81, 0.3);
+}
+
+.confidence {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.message-preview {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: left;
+    margin-top: 20px;
+    border-left: 4px solid #667eea;
+}
+
+.message-preview strong {
+    color: #667eea;
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+.message-preview p {
+    color: #555;
+    line-height: 1.6;
+    word-wrap: break-word;
+}
+
+.error {
+    margin-top: 20px;
+    padding: 20px;
+    background: #ffebee;
+    border-left: 4px solid #ff4444;
+    border-radius: 8px;
+    animation: fadeIn 0.5s;
+}
+
+.error p {
+    color: #c62828;
+    font-weight: 500;
+}
+
+footer {
+    text-align: center;
+    margin-top: 30px;
+    color: white;
+    opacity: 0.9;
+}
+
+footer p {
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+    }
+    
+    .card {
+        padding: 25px;
+    }
+    
+    .result-badge {
+        font-size: 1.2rem;
+        padding: 12px 30px;
+    }
+}

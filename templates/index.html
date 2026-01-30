@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spam Detection System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📧 Email/SMS Spam Detector</h1>
+            <p class="subtitle">Enter your message below to check if it's spam or not</p>
+        </header>
+
+        <div class="card">
+            <form id="spamForm">
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea 
+                        id="message" 
+                        name="message" 
+                        rows="6" 
+                        placeholder="Enter your email or SMS message here..."
+                        required
+                    ></textarea>
+                </div>
+
+                <button type="submit" class="btn-predict" id="predictBtn">
+                    <span class="btn-text">Predict</span>
+                    <span class="loader" style="display: none;"></span>
+                </button>
+            </form>
+
+            <div id="result" class="result" style="display: none;">
+                <div class="result-content">
+                    <h2>Prediction Result</h2>
+                    <div class="result-badge">
+                        <span id="resultText"></span>
+                    </div>
+                    <div id="confidenceText" class="confidence" style="display: none;"></div>
+                    <div class="message-preview">
+                        <strong>Message:</strong>
+                        <p id="originalMessage"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="error" class="error" style="display: none;">
+                <p id="errorText"></p>
+            </div>
+        </div>
+
+        <footer>
+            <p>Built with Machine Learning | Flask Application</p>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('spamForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const message = document.getElementById('message').value;
+            const predictBtn = document.getElementById('predictBtn');
+            const btnText = document.querySelector('.btn-text');
+            const loader = document.querySelector('.loader');
+            const resultDiv = document.getElementById('result');
+            const errorDiv = document.getElementById('error');
+            
+            // Hide previous results
+            resultDiv.style.display = 'none';
+            errorDiv.style.display = 'none';
+            
+            // Show loading state
+            predictBtn.disabled = true;
+            btnText.textContent = 'Analyzing...';
+            loader.style.display = 'inline-block';
+            
+            try {
+                const formData = new FormData();
+                formData.append('message', message);
+                
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    // Show error
+                    document.getElementById('errorText').textContent = data.error;
+                    errorDiv.style.display = 'block';
+                } else {
+                    // Show result
+                    const resultBadge = document.querySelector('.result-badge');
+                    document.getElementById('resultText').textContent = data.result;
+                    document.getElementById('originalMessage').textContent = data.message;
+                    
+                    // Set color based on result
+                    if (data.result_class === 'spam') {
+                        resultBadge.className = 'result-badge spam';
+                    } else {
+                        resultBadge.className = 'result-badge not-spam';
+                    }
+                    
+                    // Show confidence if available
+                    if (data.confidence) {
+                        document.getElementById('confidenceText').textContent = 
+                            `Confidence: ${data.confidence.toFixed(2)}%`;
+                        document.getElementById('confidenceText').style.display = 'block';
+                    } else {
+                        document.getElementById('confidenceText').style.display = 'none';
+                    }
+                    
+                    resultDiv.style.display = 'block';
+                    
+                    // Smooth scroll to result
+                    resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            } catch (error) {
+                document.getElementById('errorText').textContent = 
+                    'An error occurred while processing your request. Please try again.';
+                errorDiv.style.display = 'block';
+            } finally {
+                // Reset button state
+                predictBtn.disabled = false;
+                btnText.textContent = 'Predict';
+                loader.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
